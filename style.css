@@ -50,7 +50,7 @@ footer{
 .center-child{
   display: grid;
   place-items: center;
-  height: 80vh;
+  margin-bottom: 30px;
 }
 .warning-text{
   color: var(--warning-red) !important;
@@ -64,7 +64,6 @@ footer{
   margin: auto;
   width: 80%;
   max-width: 800px;
-  padding-bottom: 25px;
 
   display: grid;
   grid-template-columns: repeat(1, 1fr);
