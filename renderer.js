@@ -127,19 +127,24 @@ gl.attachShader(shaderProgram, compileShader(fragmentShaderSrc, gl.FRAGMENT_SHAD
 gl.linkProgram(shaderProgram)
 gl.useProgram(shaderProgram)
 
+// "link" buffers to the shader program
 SetBufferAtribute(shaderProgram, "aPosition", vertexBuffer)
 SetBufferAtribute(shaderProgram, "aColor", colorBuffer)
 
+// Set GL background and enable depth testing
 gl.clearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0)
 gl.enable(gl.DEPTH_TEST)
 
+// Main loop
 let lastTime = performance.now()
 let x = 0, y = 0, z = 0
 let rotationSpeed = 1.0
 function main(time){
+  // time between frames
   const deltaTime = time - lastTime
   lastTime = time
 
+  // update rotation
   if(!rotateByMouse){
     x += deltaTime / 3000 * rotationSpeed
     y += deltaTime / 800  * rotationSpeed
@@ -149,12 +154,14 @@ function main(time){
   rMatrix = MakeMatrixFromRotation(x, y, z)
   SetRotation(shaderProgram, rMatrix)
 
+  // clear previous frame and render a new one
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, vertices.length/3)
 
   requestAnimationFrame(main)
 }
 
+// Rotation by moving the mouse
 function OnMouseEvent(event){
   if(!rotateByMouse) return
 
@@ -163,6 +170,7 @@ function OnMouseEvent(event){
 }
 window.addEventListener("mousemove", OnMouseEvent)
 
+// Togglable depth testing
 function ChangeDepthTesting(){
   const dtCheckBox = document.querySelector("#depthTesting")
   if(dtCheckBox.checked)
@@ -171,6 +179,7 @@ function ChangeDepthTesting(){
     gl.disable(gl.DEPTH_TEST)
 }
 
+// Changable rotation speed of object
 function ChangeRotationSpeed(){
   const rsRange = document.querySelector("#rotationSpeed")
   rotationSpeed = rsRange.value
