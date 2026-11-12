@@ -3,7 +3,10 @@ const GL_VERSION = "#version 300 es"
 // Get canvas and GL context
 const canvas = document.querySelector("#renderCanvas")
 const gl = canvas.getContext("webgl2") || canvas.getContext("webgl")
-if(!gl) alert("WebGL is not supported on your device!")
+if(!gl) {
+  alert("WebGL is not supported on your device!")
+  location.href = "index.html"
+}
 
 // Load vertices that were stored
 const code = localStorage.getItem('code')
@@ -19,9 +22,14 @@ let colors = new Float32Array([
   0.5, 0.5, 1.0,
   0.0, 0.5, 0.0
 ]);
+let rotateByMouse = false
 
 eval(code)
 
+if(vertices.length != colors.length){
+  alert("Vertices and colors must have the same amount of elements!")
+  location.href = "index.html"
+}
 
 function compileShader(source, type){
   const shader = gl.createShader(type)
@@ -52,6 +60,21 @@ function SetBufferAtribute(program, name, buffer){
   gl.vertexAttribPointer(attr, 3, gl.FLOAT, false, 0, 0)
 }
 
+function MakeMatrixFromRotation(x, y, z){
+  const cosX = Math.cos(x)
+  const sinX = Math.sin(x)
+  const cosY = Math.cos(y)
+  const sinY = Math.sin(y)
+  const cosZ = Math.cos(z)
+  const sinZ = Math.sin(z)
+
+  return new Float32Array([
+    cosZ * cosY,                      sinZ * cosY,                      -sinY,        0,
+    cosZ * sinY * sinX - sinZ * cosX, sinZ * sinY * sinX + cosZ * cosX, cosY * sinX,  0,
+    cosZ * sinY * cosX + sinZ * sinX, sinZ * sinY * cosX - cosZ * sinX, cosY * cosX,  0,
+    0,                                0,                                0,            1,
+  ])
+}
 function SetRotation(program, matrix){
   const uRotation = gl.getUniformLocation(program, "uRotation")
   gl.uniformMatrix4fv(uRotation, false, matrix);
@@ -100,14 +123,35 @@ gl.useProgram(shaderProgram)
 SetBufferAtribute(shaderProgram, "aPosition", vertexBuffer)
 SetBufferAtribute(shaderProgram, "aColor", colorBuffer)
 
-rMatrix = new Float32Array([
-  1, 0, 0, 0,
-  0, 1, 0, 0,
-  0, 0, 1, 0,
-  0, 0, 0, 1,
-])
-SetRotation(shaderProgram, rMatrix)
-
 gl.clearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0)
-gl.clear(gl.COLOR_BUFFER_BIT)
-gl.drawArrays(gl.TRIANGLES, 0, 3)
+gl.enable(gl.DEPTH_TEST)
+
+let lastTime = performance.now()
+let x = 0, y = 0, z = 0
+function main(time){
+  const deltaTime = time - lastTime
+  lastTime = time
+
+  if(!rotateByMouse){
+    x += deltaTime / 3000
+    y += deltaTime / 800
+    z += deltaTime / 2300
+  }
+
+  rMatrix = MakeMatrixFromRotation(x, y, z)
+  SetRotation(shaderProgram, rMatrix)
+
+  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
+  gl.drawArrays(gl.TRIANGLES, 0, vertices.length/3)
+
+  requestAnimationFrame(main)
+}
+
+function OnMouseEvent(event){
+  if(!rotateByMouse) return
+
+  y += event.movementX / 700
+  x += event.movementY / 700
+}
+window.addEventListener("mousemove", OnMouseEvent)
+requestAnimationFrame(main)

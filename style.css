@@ -59,9 +59,10 @@ footer{
   gap: 1rem;
 
   > textarea{
-    height: 20em;
+    height: 40em;
     text-align: left;
     resize: none;
+    font-size: 0.6rem;
   }
   > button{
     font: 600 1.4rem monospace;
@@ -86,6 +87,6 @@ footer{
   }
 }
 
-@media (min-width: 500px) {
+@media (min-width: 970px) {
   .content { grid-template-columns: repeat(2, 1fr); }
 }
