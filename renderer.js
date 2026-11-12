@@ -128,14 +128,15 @@ gl.enable(gl.DEPTH_TEST)
 
 let lastTime = performance.now()
 let x = 0, y = 0, z = 0
+let rotationSpeed = 1.0
 function main(time){
   const deltaTime = time - lastTime
   lastTime = time
 
   if(!rotateByMouse){
-    x += deltaTime / 3000
-    y += deltaTime / 800
-    z += deltaTime / 2300
+    x += deltaTime / 3000 * rotationSpeed
+    y += deltaTime / 800  * rotationSpeed
+    z += deltaTime / 2300 * rotationSpeed
   }
 
   rMatrix = MakeMatrixFromRotation(x, y, z)
@@ -150,8 +151,22 @@ function main(time){
 function OnMouseEvent(event){
   if(!rotateByMouse) return
 
-  y += event.movementX / 700
-  x += event.movementY / 700
+  y += event.movementX / 700 * rotationSpeed
+  x += event.movementY / 700 * rotationSpeed
 }
 window.addEventListener("mousemove", OnMouseEvent)
+
+function ChangeDepthTesting(){
+  const dtCheckBox = document.querySelector("#depthTesting")
+  if(dtCheckBox.checked)
+    gl.enable(gl.DEPTH_TEST)
+  else
+    gl.disable(gl.DEPTH_TEST)
+}
+
+function ChangeRotationSpeed(){
+  const rsRange = document.querySelector("#rotationSpeed")
+  rotationSpeed = rsRange.value
+}
+
 requestAnimationFrame(main)

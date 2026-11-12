@@ -15,6 +15,14 @@
   </header>
   <main class="center-child">
     <canvas id="renderCanvas" width="400" height="400"></canvas>
+    <div>
+      <label for="depthTesting">Depth Testing:</label>
+      <input type="checkbox" name="depthTesting" id="depthTesting" onchange="ChangeDepthTesting()" checked>
+    </div>
+    <div>
+      <label for="rotationSpeed">Rotation Speed:</label>
+      <input type="range" name="rotationSpeed" id="rotationSpeed" min="0.0" max="2.0" step="0.1" value="1.0" onchange="ChangeRotationSpeed()">
+    </div>
   </main>
   <footer>2026 - Jan Richter</footer>
 </body>
