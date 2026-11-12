@@ -8,6 +8,13 @@ if(!gl) {
   location.href = "index.html"
 }
 
+// Scale based on window size
+if(window.innerWidth < 450){
+  canvas.width = 300
+  canvas.height = 300
+  gl.viewport(0, 0, canvas.width, canvas.height)
+}
+
 // Load vertices that were stored
 const code = localStorage.getItem('code')
 
