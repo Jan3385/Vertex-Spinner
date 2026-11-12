@@ -86,6 +86,10 @@ function SetRotation(program, matrix){
   const uRotation = gl.getUniformLocation(program, "uRotation")
   gl.uniformMatrix4fv(uRotation, false, matrix);
 }
+function SetScale(program, scale){
+  const uScale = gl.getUniformLocation(program, "uScale")
+  gl.uniform1f(uScale, scale)
+}
 
 // Vertex shader code
 const vertexShaderSrc = `${GL_VERSION}
@@ -93,12 +97,13 @@ in vec3 aPosition;
 in vec3 aColor;
 
 uniform mat4 uRotation;
+uniform float uScale;
 
 out vec3 vColor;
 
 void main(){
   vColor = aColor;
-  gl_Position = uRotation * vec4(aPosition, 1.0);
+  gl_Position = uRotation * vec4(aPosition * uScale, 1.0);
 }
 `
 
@@ -134,6 +139,8 @@ SetBufferAtribute(shaderProgram, "aColor", colorBuffer)
 // Set GL background and enable depth testing
 gl.clearColor(backgroundColor.r, backgroundColor.g, backgroundColor.b, 1.0)
 gl.enable(gl.DEPTH_TEST)
+
+SetScale(shaderProgram, 1.0)
 
 // Main loop
 let lastTime = performance.now()
@@ -183,6 +190,12 @@ function ChangeDepthTesting(){
 function ChangeRotationSpeed(){
   const rsRange = document.querySelector("#rotationSpeed")
   rotationSpeed = rsRange.value
+}
+
+// Changable scale of object
+function ChangeScale(){
+  const scale = document.querySelector("#scale")
+  SetScale(shaderProgram, scale.value)
 }
 
 requestAnimationFrame(main)
