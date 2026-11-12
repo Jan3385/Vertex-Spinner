@@ -1,0 +1,91 @@
+:root{
+  --primary-color: #0d0c08;
+  --secondary-color: #043f77;
+  --light-background: #e4a571;
+  --lighter-background: #ebd1bc;
+  --button-normal: #de7138;
+  --button-hover: #e66d2c;
+}
+header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 1rem;
+
+  > h1{
+    grid-column: 2;
+    margin: 0;
+  }
+  > a{
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  @media (min-width: 500px) {
+  > a{ grid-column: 3; }
+  }
+}
+body{
+  font-family: monospace;
+  background-color: var(--lighter-background);
+}
+h1{
+  text-align: center;
+  color: var(--primary-color)
+}
+footer{
+  position: fixed;
+  bottom: 0;
+  left: 0;
+
+  width: 100%;
+
+  text-align: center;
+  color: var(--primary-color);
+  background-color: var(--light-background);
+}
+.center-child{
+  display: grid;
+  place-items: center;
+  height: 80vh;
+}
+.content{
+  margin: auto;
+  width: 80%;
+  max-width: 800px;
+
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1rem;
+
+  > textarea{
+    height: 20em;
+    text-align: left;
+    resize: none;
+  }
+  > button{
+    font: 600 1.4rem monospace;
+    color: #fff;
+    background-color: var(--button-normal);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+  }
+  > button:hover{
+    background-color: var(--button-hover);
+  }
+  > div{
+    background-color: var(--light-background);
+    padding: 10px;
+    border-radius: 8px;
+  }
+  ul li{
+    margin-bottom: 10px;
+    color: var(--secondary-color)
+  }
+}
+
+@media (min-width: 500px) {
+  .content { grid-template-columns: repeat(2, 1fr); }
+}
