@@ -5,6 +5,8 @@
   --lighter-background: #ebd1bc;
   --button-normal: #de7138;
   --button-hover: #e66d2c;
+  --warning-red: #db4040;
+  --warning-background: rgba(255, 255, 255, 0.85);
 }
 header {
   display: grid;
@@ -48,6 +50,14 @@ footer{
   display: grid;
   place-items: center;
   height: 80vh;
+}
+.warning-text{
+  color: var(--warning-red) !important;
+  background-color: var(--warning-background) !important;
+  width: fit-content;
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 8px;
 }
 .content{
   margin: auto;
